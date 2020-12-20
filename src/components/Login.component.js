@@ -1,5 +1,4 @@
 import React from "react";
-import { Redirect,Route, Link } from 'react-router-dom';
 import Axios from "axios";
 
 export default class Login extends React.Component{

@@ -1,6 +1,5 @@
 import Axios from "axios";
 import React from "react";
-import { Redirect,Route, Link } from 'react-router-dom';
 
 export default class Register extends React.Component{
     constructor(){
@@ -11,7 +10,11 @@ export default class Register extends React.Component{
             regdno: "",
             email: "",
             password: "",
-            profilepic: null
+            profilepic: null,
+            success:false,
+            error:false,
+            success_message:"",
+            error_message:""
         }
         this.inputHandler = this.inputHandler.bind(this);
         this.submitHandler = this.submitHandler.bind(this);
@@ -34,15 +37,14 @@ export default class Register extends React.Component{
     submitHandler(event){
         event.preventDefault();
 
-        console.log(this.state.profilepic)
-
+        const file = this.state.profilepic;
         let formdata = new FormData();
-        formdata.append('username',`${this.state.username}`)
-        formdata.append('fullname',`${this.state.fullname}`)
-        formdata.append('regdno',`${this.state.regdno}`)
-        formdata.append('email',`${this.state.email}`)
-        formdata.append('password',`${this.state.password}`)
-        formdata.append('profilepic',`${this.state.profilepic}`)
+        formdata.append('username',this.state.username)
+        formdata.append('fullname',this.state.fullname)
+        formdata.append('regdno',this.state.regdno)
+        formdata.append('email',this.state.email)
+        formdata.append('password',this.state.password)
+        formdata.append('profilepic',file)
 
         const config = {     
             headers: { 'content-type': 'multipart/form-data' }
@@ -50,7 +52,22 @@ export default class Register extends React.Component{
         const url = "http://localhost:8110/api/user/register"
         Axios.post(url,formdata,config)
             .then((data) => {
-                console.log(data.data);
+                if(data.data.eid === 0){
+                    // no error, success inserted
+                    this.setState({
+                        success:true,
+                        success_message: data.data.details
+                    })
+                    window.setTimeout(()=>{
+                        window.location = "/login"
+                    },5000);
+                }else{
+                    //error in the database side
+                    this.setState({
+                        error:true,
+                        error_message: data.data.details
+                    })
+                }
             })
             .catch((error)=>{
                 console.log(error);
@@ -58,19 +75,16 @@ export default class Register extends React.Component{
     }
 
     render(){
+        const Smessage = this.state.success === true ? <div className="alert alert-primary" role="alert">{this.state.success_message} <br /> Redirecting to Login in 5 seconds</div>: "";
+        const Emessage = this.state.error === true ? <div className="alert alert-warning" role="alert">{this.state.error_message}</div>: "";
         const myStyleInput = {
-            marginTop: "100px",
+            marginTop: "1vw",
             marginLeft:"35vw",
             width:"30vw"
         }
         return(
             <div style={myStyleInput}>
                 <label style={{position:"center"}}>Register</label>
-                {this.state.username} <br />
-                {this.state.fullname} <br />
-                {this.state.regdno} <br />
-                {this.state.email}  <br />
-                {this.state.password} <br />
                 <form onSubmit={this.submitHandler}>
                     <div className="form-group">
                         <label>Username</label>
@@ -94,9 +108,12 @@ export default class Register extends React.Component{
                     </div>
                     <div className="form-group">
                         <label>Profile Pic</label>
-                        <input type="file" className="form-control-file" id="profilepic" name="profilepic" onChange={this.inputHandler} />
+                        <input type="file" className="form-control-file" id="profilepic" name="profilepic" onChange={this.inputHandler} accept="image/*" />
                     </div>
                     <button type="submit" className="btn btn-primary" style={{marginLeft:"10vw"}}>Submit</button>
+                    <br />
+                    {Smessage}
+                    {Emessage}
                 </form>
             </div>
         )

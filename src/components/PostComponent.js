@@ -1,6 +1,5 @@
 import Axios from "axios";
 import React from "react";
-import { Redirect,Route, Link } from 'react-router-dom';
 
 export default class PostComponent extends React.Component{
     constructor(props){
