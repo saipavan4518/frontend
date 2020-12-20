@@ -20,7 +20,7 @@ function App() {
 
           <Route path="/login" component={Login} />
           <Route path="/register" component={Register} />
-          <Route path="/Forum" component={Forum} />
+          <Route path="/forum" component={Forum} />
           <Route strict path="/thread/:id" component={RenderThread} />
         </div>
     </Router>

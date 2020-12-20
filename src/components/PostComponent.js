@@ -94,13 +94,13 @@ export default class PostComponent extends React.Component{
         }
 
         const upvoteImg = this.state.isUp === 0? 
-                            <i class='fas fa-arrow-alt-circle-up' style={buttonNotCSS} onClick={()=>{this.uAdhandler("1989")}}></i>
-                        :   <i class='fas fa-arrow-alt-circle-up' style={buttonCSS} onClick={()=>{this.uAdhandler("1989")}}></i>;
+                            <i className='fas fa-arrow-alt-circle-up' style={buttonNotCSS} onClick={()=>{this.uAdhandler("1989")}}></i>
+                        :   <i className='fas fa-arrow-alt-circle-up' style={buttonCSS} onClick={()=>{this.uAdhandler("1989")}}></i>;
                         
                         
         const downvoteImg = this.state.isDown === 0?
-                            <i class='fas fa-arrow-alt-circle-down' style={buttonNotCSS} onClick={()=>{this.uAdhandler("2324")}}></i>
-                        :   <i class='fas fa-arrow-alt-circle-down' style={buttonCSS} onClick={()=>{this.uAdhandler("2324")}}></i>;
+                            <i className='fas fa-arrow-alt-circle-down' style={buttonNotCSS} onClick={()=>{this.uAdhandler("2324")}}></i>
+                        :   <i className='fas fa-arrow-alt-circle-down' style={buttonCSS} onClick={()=>{this.uAdhandler("2324")}}></i>;
 
         return(
             <div className="row">
@@ -108,7 +108,7 @@ export default class PostComponent extends React.Component{
                     <div className="card-body">
                         <h5 className="card-title">{this.props.post.user_id}</h5>
                         <p className="card-text">{this.props.post.post_subject}</p>
-                        <img src={this.props.post.post_img} alt={this.props.post.user_id} width="400" height="400" />
+                        <img src={this.props.post.post_img} alt={this.props.post.user_id} width="200" height="200" />
                         <p>{this.props.post.post_img}</p>
                         <p>{this.state.postvotes}</p>
                         {upvoteImg}
