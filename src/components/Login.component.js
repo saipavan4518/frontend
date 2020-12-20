@@ -39,8 +39,8 @@ export default class Login extends React.Component{
     render(){
         const myStyleInput = {
             marginTop: "100px",
-            marginLeft:"400px",
-            width:"500px"
+            marginLeft:"35vw",
+            width:"30vw"
         }
         const redFlag = this.state.isF === true ? <div class="alert alert-danger" role="alert">Username and Password are wrong !!</div> :
                 <div></div>;
@@ -56,7 +56,7 @@ export default class Login extends React.Component{
                         <label  className="form-label">Password</label>
                         <input type="password" className="form-control" id="password" name="password" onChange={this.inputHandler}/>
                     </div>
-                    <button type="submit" className="btn btn-primary" style={{marginLeft:"165px"}}>Submit</button>
+                    <button type="submit" className="btn btn-primary" style={{marginLeft:"10vw"}}>Submit</button>
                 </form> 
                 <br />
                 {redFlag}
