@@ -93,13 +93,13 @@ export default class PostComponent extends React.Component{
         }
 
         const upvoteImg = this.state.isUp === 0? 
-                            <i className='fas fa-arrow-alt-circle-up' style={buttonNotCSS} onClick={()=>{this.uAdhandler("1989")}}></i>
-                        :   <i className='fas fa-arrow-alt-circle-up' style={buttonCSS} onClick={()=>{this.uAdhandler("1989")}}></i>;
+                            <i className='fas fa-angle-up' style={buttonNotCSS} onClick={()=>{this.uAdhandler("1989")}}></i>
+                        :   <i className='fas fa-angle-up' style={buttonCSS} onClick={()=>{this.uAdhandler("1989")}}></i>;
                         
                         
         const downvoteImg = this.state.isDown === 0?
-                            <i className='fas fa-arrow-alt-circle-down' style={buttonNotCSS} onClick={()=>{this.uAdhandler("2324")}}></i>
-                        :   <i className='fas fa-arrow-alt-circle-down' style={buttonCSS} onClick={()=>{this.uAdhandler("2324")}}></i>;
+                            <i className='fas fa-angle-down' style={buttonNotCSS} onClick={()=>{this.uAdhandler("2324")}}></i>
+                        :   <i className='fas fa-angle-down' style={buttonCSS} onClick={()=>{this.uAdhandler("2324")}}></i>;
 
         return(
             <div className="row">
