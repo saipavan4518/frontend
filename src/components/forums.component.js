@@ -38,8 +38,9 @@ export default class Forum extends React.Component{
     }
 
     rerenderParent(){
-        this.setState({
-            normalUpdate: !this.state.normalUpdate
+        console.log("Got ")
+        this.setState((state) => {
+            return {normalUpdate: !state.normalUpdate}
         })
     }
     render(){
@@ -47,7 +48,7 @@ export default class Forum extends React.Component{
             return(
                 <ErrorPage />
             );
-        }  else{
+        }else{
             const threads = this.state.threads.map((thread)=>{
                 return <Thread key={thread.thread_id} thread={thread} parentRender={this.rerenderParent} />
             })

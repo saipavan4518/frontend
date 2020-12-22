@@ -8,8 +8,8 @@ export default class PostComponent extends React.Component{
         this.state={
             postID:this.props.post.post_id,
             postvotes: this.props.post.post_votes,
-            isUp:0,
-            isDown:0
+            isUpVoted: false,
+            isDownVoted: false
         }
         this.uAdhandler = this.uAdhandler.bind(this);
     }
@@ -18,65 +18,74 @@ export default class PostComponent extends React.Component{
         // if isUP > 1 no upvotes anymore
         // if isUp == 0 and isDown == 0 then we should upvote and then make isUp + 1
         // if isDown > 0  no downvotes anymore
-        // if isDown == 0  and isUp = 0 then we should downvote and then make isDown + 1 
+        // if isDown == 0  and isUp = 0 then we should downvote and then make isDown + 1
         // if isUp == 1 action:upvote then we should downvote implicitly
         // if isDown == 1 action:downvote then we should upvote implicitly
         const upvote = `http://localhost:8110/api/forums/posts/${this.state.postID}/1989`
         const downvote = `http://localhost:8110/api/forums/posts/${this.state.postID}/2324`
 
-        if(id === "1989" && this.state.isUp === 0 && this.state.isDown === 0){
-            //upvote
-            Axios.put(upvote)
-                .then((data)=>{
-                    this.setState({
-                        postvotes: data.data.votes,
-                        isUp: 1
-                    })
-                })
-                .catch((error)=>{
-                    console.log(error)
-                })
+        if(id === 1989 && !this.state.isDownVoted){
 
-        }
-        if(id === "1989" && this.state.isUp === 1){
-            //downvote
-            Axios.put(downvote)
-                .then((data)=>{
-                    this.setState({
-                        postvotes: data.data.votes,
-                        isUp: 0
+			if(this.state.upVoted){
+				console.log("Change Upvote to False")
+                Axios.put(downvote)
+                    .then((data)=>{
+                        this.setState({
+                            postvotes: data.data.votes,
+                        })
                     })
-                })
-                .catch((error)=>{
-                    console.log(error)
-                })
-        }
-        if(id === "2324" && this.state.isDown === 0 && this.state.isUp === 0){
-            //downvote
-            Axios.put(downvote)
-                .then((data)=>{
-                    this.setState({
-                        postvotes: data.data.votes,
-                        isDown: 1
+                    .catch((error)=>{
+                        console.log(error)
                     })
-                })
-                .catch((error)=>{
-                    console.log(error)
-                })
-        }
-        if(id === "2324" && this.state.isDown === 1){
-            //upvote
-            Axios.put(upvote)
-                .then((data)=>{
-                    this.setState({
-                        postvotes: data.data.votes,
-                        isDown: 0
+			}else{
+				console.log("Upvote a post")
+                Axios.put(upvote)
+                    .then((data)=>{
+                        this.setState({
+                            postvotes: data.data.votes,
+                        })
                     })
-                })
-                .catch((error)=>{
-                    console.log(error)
-                })
-        }
+                    .catch((error)=>{
+                        console.log(error)
+                    })
+			}
+
+			//Update State
+			this.setState(prevState => ({
+				upVoted: !prevState.upVoted
+			}));
+		}
+		if(id === 2324 && !this.state.upVoted){
+
+			if(this.state.downVoted){
+				console.log("Change downvote to False")
+                Axios.put(upvote)
+                    .then((data)=>{
+                        this.setState({
+                            postvotes: data.data.votes,
+                        })
+                    })
+                    .catch((error)=>{
+                        console.log(error)
+                    })
+			}else{
+				console.log("Downvote a post")
+                Axios.put(downvote)
+                    .then((data)=>{
+                        this.setState({
+                            postvotes: data.data.votes,
+                        })
+                    })
+                    .catch((error)=>{
+                        console.log(error)
+                    })
+			}
+
+			//Updating State Variable
+			this.setState(prevState => ({
+				downVoted: !prevState.downVoted
+			}))
+		}
     }
     render(){
         const styleCard = {
@@ -92,14 +101,14 @@ export default class PostComponent extends React.Component{
             color:"red"
         }
 
-        const upvoteImg = this.state.isUp === 0? 
-                            <i className='fas fa-angle-up' style={buttonNotCSS} onClick={()=>{this.uAdhandler("1989")}}></i>
-                        :   <i className='fas fa-angle-up' style={buttonCSS} onClick={()=>{this.uAdhandler("1989")}}></i>;
-                        
-                        
-        const downvoteImg = this.state.isDown === 0?
-                            <i className='fas fa-angle-down' style={buttonNotCSS} onClick={()=>{this.uAdhandler("2324")}}></i>
-                        :   <i className='fas fa-angle-down' style={buttonCSS} onClick={()=>{this.uAdhandler("2324")}}></i>;
+        const upvoteImg = !this.state.isUpVoted ?
+                            <i className='fas fa-angle-up' style={buttonNotCSS} onClick={()=>{this.uAdhandler(1989)}}></i>
+                        :   <i className='fas fa-angle-up' style={buttonCSS} onClick={()=>{this.uAdhandler(1989)}}></i>;
+
+
+        const downvoteImg = !this.state.isDownVoted?
+                            <i className='fas fa-angle-down' style={buttonNotCSS} onClick={()=>{this.uAdhandler(2324)}}></i>
+                        :   <i className='fas fa-angle-down' style={buttonCSS} onClick={()=>{this.uAdhandler(2324)}}></i>;
 
         return(
             <div className="row">
