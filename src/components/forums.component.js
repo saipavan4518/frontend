@@ -1,5 +1,6 @@
 import React from "react";
 import Axios from 'axios';
+import {socket} from '../services/socket'
 
 import Thread from './Thread.component';
 import ErrorPage from './DeadBackend.component';
@@ -13,43 +14,58 @@ export default class Forum extends React.Component{
             isFailed: false,
             normalUpdate:false
         }
-
-        this.rerenderParent = this.rerenderParent.bind(this);
     }
 
     componentDidMount(){
-        const url = "http://localhost:8110/api/forums/getthreads"
-        Axios.get(url)
-            .then((data)=>{
-                this.setState({
-                    threads:data.data.map((thread)=>thread)
-                })
-            })
-            .catch((error)=>{
-                if(error.response){
-                    console.log("saipavan")
-                    console.log(error.response.status);
-                }else{
+        socket.on("render_threads_client",()=>{
+            console.log("rendering the threads")
+            const url = "http://localhost:8110/api/forums/getthreads"
+            Axios.get(url)
+                .then((data)=>{
                     this.setState({
-                        isFailed:true
-                    })
-                }
-            })
+                        threads:data.data.map((thread)=>thread)      
+                    })               
+                })
+                .catch((error)=>{
+                    if(error.response){
+                        console.log("saipavan")
+                        console.log(error.response.status);
+                    }else{
+                        this.setState({
+                            isFailed:true
+                        })
+                    }
+                })
+        })
+
+        const url = "http://localhost:8110/api/forums/getthreads"
+            Axios.get(url)
+                .then((data)=>{
+                    this.setState({
+                        threads:data.data.map((thread)=>thread)      
+                    })               
+                })
+                .catch((error)=>{
+                    if(error.response){
+                        console.log("saipavan")
+                        console.log(error.response.status);
+                    }else{
+                        this.setState({
+                            isFailed:true
+                        })
+                    }
+                })
+
     }
 
-    rerenderParent(){
-        this.setState({
-            normalUpdate: !this.state.normalUpdate
-        })
-    }
     render(){
         if(this.state.isFailed === true){
             return(
                 <ErrorPage />
             );
-        }  else{
+        }else{
             const threads = this.state.threads.map((thread)=>{
-                return <Thread key={thread.thread_id} thread={thread} parentRender={this.rerenderParent} />
+                return <Thread key={thread.thread_id} thread={thread}/>
             })
             return(
                 <div className="main-div">
@@ -63,7 +79,7 @@ export default class Forum extends React.Component{
                             </div>
                         </div>
                         <div className="row">
-                            <InputComponent parentRender={this.rerenderParent}/>
+                            <InputComponent />
                         </div>
                     </div>
                 </div>

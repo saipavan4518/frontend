@@ -1,5 +1,6 @@
 import Axios from "axios";
 import React from "react";
+import {socket} from "../services/socket"
 
 
 export default class InputComponent extends React.Component{
@@ -28,6 +29,7 @@ export default class InputComponent extends React.Component{
 
     submitHandler(event){
         event.preventDefault();
+
         const data = new FormData();
         data.append("u_id",this.state.u_id);
         data.append("f_id",this.state.f_id);
@@ -39,10 +41,14 @@ export default class InputComponent extends React.Component{
         Axios.post(url,this.state)
             .then((data)=>{
                 console.log(data)
-                this.props.parentRender();
-                this.setState({
-                    set:true
-                })
+        
+                // as the data is submitted. pass a event to render all the threads in every connection
+                // event: render_threads
+                socket.emit("render_threads");
+
+
+
+            
             })
             .catch((error)=>{
                 console.log(error)
